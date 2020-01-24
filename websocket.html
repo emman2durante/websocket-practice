@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>WebSocket demo</title>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.js"></script>
+    </head>
+    <body>
+
+        <fieldset>
+            <legend>Live Chat</legend>
+            <div style="background: #ffffff;overflow-y: auto; max-height: 400px; min-height: 400px">
+                <ul style="margin: 0px;"></ul>
+            </div>
+            <div>
+                <form id="message_form" method="GET">
+                    <input type="hidden" name="identity" value="emman">
+                    <input id="message" type="text" name="message" placeholder="Enter message" value="" style="width:100%; padding: 5px; box-sizing: border-box; ">
+                </form>
+            </div>
+        </fieldset>
+
+        <script>
+            var socket = new WebSocket("ws://10.5.89.15:8080/"),
+                messages = document.createElement('ul');
+                socket.onmessage = function (event) {
+                    var messages = document.getElementsByTagName('ul')[0],
+                        message = document.createElement('li'),
+                        data2 = JSON.parse(event.data),
+                        content = document.createTextNode(data2[0]['value'] + ": " + data2[1]['value']);
+                        
+                        console.log(event);
+                        console.log(data2);
+
+                    message.appendChild(content);
+                    messages.appendChild(message);
+                };
+            document.body.appendChild(messages);
+
+            
+            document.getElementById('message_form').addEventListener("submit", function(e) {
+                e.preventDefault();
+                socket.send(JSON.stringify($(this).serializeArray()));
+                $("#message").val('');
+            });
+        </script>
+    </body>
+</html>
