@@ -7,40 +7,48 @@
     <body>
 
         <fieldset>
-            <legend>Live Chat</legend>
+            <legend>Live Chat (Beta)</legend>
             <div style="background: #ffffff;overflow-y: auto; max-height: 400px; min-height: 400px">
                 <ul style="margin: 0px;"></ul>
             </div>
+            <hr />
             <div>
                 <form id="message_form" method="GET">
-                    <input type="hidden" name="identity" value="emman">
-                    <input id="message" type="text" name="message" placeholder="Enter message" value="" style="width:100%; padding: 5px; box-sizing: border-box; ">
+                    <!-- Replace with your identity -->
+                    <label>Sending message as:</label>
+                    <input type="text" name="identity" value="Emman" style="margin-bottom: 5px">
+                    <input id="message" type="text" name="message" placeholder="Enter message" value="" style="width:100%; padding: 5px; box-sizing: border-box; margin-bottom: 5px">
+                    <input type="submit" hidden /> <!-- to allow enter key -->
+                    <button type="submit">Send message</button>
                 </form>
             </div>
         </fieldset>
 
         <script>
-            var socket = new WebSocket("ws://10.5.89.15:8080/"),
-                messages = document.createElement('ul');
-                socket.onmessage = function (event) {
-                    var messages = document.getElementsByTagName('ul')[0],
-                        message = document.createElement('li'),
-                        data2 = JSON.parse(event.data),
-                        content = document.createTextNode(data2[0]['value'] + ": " + data2[1]['value']);
-                        
-                        console.log(event);
-                        console.log(data2);
+            const createMessageElement = (event) => {
+                const messages = document.getElementsByTagName('ul')[0];
+                const message = document.createElement('li'),
+                data2 = JSON.parse(event.data),
+                content = document.createTextNode(data2[0]['value'] + ": " + data2[1]['value']);
+                
+                console.log(event);
+                console.log(data2);
 
-                    message.appendChild(content);
-                    messages.appendChild(message);
-                };
-            document.body.appendChild(messages);
+                message.appendChild(content);
+                messages.appendChild(message);
+                // document.body.appendChild(messages);
+            }
+            const socket = new WebSocket("wss://socketsbay.com/wss/v2/1/demo/");
+            socket.onmessage = createMessageElement;
 
             
             document.getElementById('message_form').addEventListener("submit", function(e) {
                 e.preventDefault();
-                socket.send(JSON.stringify($(this).serializeArray()));
-                $("#message").val('');
+                const messageEvent = JSON.stringify($(this).serializeArray());
+                console.log(this)
+                socket.send(messageEvent);
+                createMessageElement({ data: messageEvent });
+                $("#message").val(''); // Clear textbox
             });
         </script>
     </body>
