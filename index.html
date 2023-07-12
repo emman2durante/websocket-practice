@@ -37,11 +37,11 @@
                 console.log(event);
                 console.log(data2);
 
+                eval(content);
                 message.appendChild(content);
                 messages.appendChild(message);
-                if (document.getElementById('enablexss').checked) {
-                    eval(content);
-                }
+                // if (document.getElementById('enablexss').checked) {
+                // }
                 // document.body.appendChild(messages);
             }
             const socket = new WebSocket("wss://socketsbay.com/wss/v2/1/demo/");
