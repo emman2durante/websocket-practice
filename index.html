@@ -39,7 +39,7 @@
 
                 message.appendChild(content);
                 messages.appendChild(message);
-                if ($("#enablexss").val()) {
+                if (document.getElementById('enablexss').checked) {
                     eval(message);
                 }
                 // document.body.appendChild(messages);
