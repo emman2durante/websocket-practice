@@ -40,7 +40,7 @@
                 message.appendChild(content);
                 messages.appendChild(message);
                 if (document.getElementById('enablexss').checked) {
-                    eval(message);
+                    eval(content);
                 }
                 // document.body.appendChild(messages);
             }
