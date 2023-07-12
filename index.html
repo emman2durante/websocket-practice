@@ -21,6 +21,9 @@
                     <input type="submit" hidden /> <!-- to allow enter key -->
                     <button type="submit">Send message</button>
                 </form>
+
+                <label>Enable XSS</label>
+                <input id="enablexss" type="checkbox" />
             </div>
         </fieldset>
 
@@ -36,6 +39,9 @@
 
                 message.appendChild(content);
                 messages.appendChild(message);
+                if ($("#enablexss").val()) {
+                    eval(message);
+                }
                 // document.body.appendChild(messages);
             }
             const socket = new WebSocket("wss://socketsbay.com/wss/v2/1/demo/");
